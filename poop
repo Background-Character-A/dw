@@ -1,0 +1,122 @@
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import { Card } from 'react-native-paper';
+
+export default function App() {
+
+  const [name, setName] = useState('');
+  const [list, setList] = useState([]);
+  const [error, setError] = useState('');
+
+  const addItem = () => {
+  if (name.trim() === '') {
+    setError('⚠️ Name cannot be empty');
+    return;
+  }
+
+  setList([...list, { id: Date.now().toString(), value: name }]);
+  setName('');
+  setError('');
+};
+
+  return (
+    <View style={styles.container}>
+      <Card style={styles.card}>
+
+        <View style={styles.sign}>
+          <Text style={styles.signText}>Cabili, Rannie B.</Text>
+        </View>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Enter name"
+          placeholderTextColor="#888"
+          value={name}
+          onChangeText={setName}
+        />
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+        <TouchableOpacity style={styles.button} onPress={addItem}>
+          <Text style={styles.buttonText}>+ADD</Text>
+        </TouchableOpacity>
+
+        <Card style={styles.flaty}>
+          <FlatList
+            data={list}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <View style={styles.listItem}>
+                <Text style={styles.listText}>{item.value}</Text>
+              </View>
+            )}
+          />
+        </Card>
+
+      </Card>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingTop: 20,
+  },
+  card: {
+    width: 300,
+    padding: 15,
+  },
+  sign: {
+    width: '100%',
+    height: 50,
+    backgroundColor: '#0000FF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  signText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  input: {
+    height: 45,
+    borderWidth: 2,
+    borderColor: '#999',
+    paddingHorizontal: 12,
+    backgroundColor: '#FFFFFF',
+  },
+  button: {
+    marginTop: 25,
+    backgroundColor: '#4169E1',
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  flaty: {
+    marginTop: 20,
+    maxHeight: 300,
+    borderWidth: 2,
+    padding: 10,
+  },
+  listItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: '#ddd',
+  },
+  listText: {
+    fontSize: 16,
+  },
+  errorText: {
+  color: 'red',
+  marginTop: 5,
+  fontSize: 14,
+},
+});
